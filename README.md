@@ -17,11 +17,6 @@ To run on windows
 2. put the file in /panda-exercise/src/main/resources
 3. follow the above 3-6 steps
 
-To run on windows 
-
-1. download https://s3-us-west-1.amazonaws.com/bp-interview-artifacts/generator-windows-amd64.exe 
-2. put the file in /panda-exercise/src/main/resources
-3. follow the above 3-6 steps
 
 
 things to improve in my submission.
