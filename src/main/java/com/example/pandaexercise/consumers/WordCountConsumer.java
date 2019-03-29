@@ -1,0 +1,30 @@
+package com.example.pandaexercise.consumers;
+
+import com.example.pandaexercise.event.PandaEvent;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+@Component
+public class WordCountConsumer extends BaseSubscriber {
+
+    public Map<String, AtomicInteger> getWordsMap(){
+        return super.getMap();
+    }
+
+    @Override
+    public void onNext(String pandaEventStr) {
+        PandaEvent pandaEvent = super.convertStr(pandaEventStr);
+        if(pandaEvent==null) return;
+        String data = pandaEvent.getData();
+        if(data==null) return;
+
+        String[] split = data.split(" ");
+        for (String s : split) {
+            super.putInMap(s);
+        }
+    }
+
+
+}
