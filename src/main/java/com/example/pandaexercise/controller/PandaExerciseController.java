@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 public class PandaExerciseController {
@@ -18,19 +17,14 @@ public class PandaExerciseController {
     @Autowired
     WordCountConsumer wordCountConsumer;
 
-//    @GetMapping("/{id}")
-//    private Mono<Employee> getEmployeeById(@PathVariable String id) {
-//        return employeeRepository.findEmployeeById(id);
-//    }
-
 
     @GetMapping("/eventsByType")
-    private Mono<Map<String, AtomicInteger>> getEventsByType() {
+    private Mono<Map<String, Integer>> getEventsByType() {
         return Mono.just(eventByTypeConsumer.getEventsByType());
     }
 
     @GetMapping("/wordsCount")
-    private Mono<Map<String, AtomicInteger>> getWordsCount() {
+    private Mono<Map<String, Integer>> getWordsCount() {
         return Mono.just(wordCountConsumer.getWordsMap());
     }
 

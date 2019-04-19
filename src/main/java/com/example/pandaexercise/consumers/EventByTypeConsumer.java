@@ -4,19 +4,17 @@ import com.example.pandaexercise.event.PandaEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class EventByTypeConsumer extends BaseSubscriber {
 
-    public Map<String, AtomicInteger> getEventsByType(){
+    public Map<String, Integer> getEventsByType(){
         return super.getMap();
     }
 
     @Override
-    public void onNext(String pandaEventStr) {
-        PandaEvent pandaEvent = super.convertStr(pandaEventStr);
-        if(pandaEvent==null) return;
+    public void onNext(PandaEvent pandaEvent) {
+        if(pandaEvent==null || pandaEvent.getEvent_type()==null) return;
         super.putInMap(pandaEvent.getEvent_type());
     }
 

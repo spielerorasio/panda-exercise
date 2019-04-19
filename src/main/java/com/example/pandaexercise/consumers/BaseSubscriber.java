@@ -1,26 +1,19 @@
 package com.example.pandaexercise.consumers;
 
 import com.example.pandaexercise.event.PandaEvent;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class BaseSubscriber implements Subscriber<String> {
-    private static final Logger logger = LoggerFactory.getLogger(BaseSubscriber.class);
+public abstract class BaseSubscriber implements Subscriber<PandaEvent> {
 
-    private ConcurrentHashMap<String, AtomicInteger> map = new ConcurrentHashMap();
+    private ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap();
 
-    public Map<String, AtomicInteger> getMap(){
+    public Map<String, Integer> getMap(){
         return map;
     }
-    ObjectMapper objectMapper = new ObjectMapper();
 
 
     @Override
@@ -30,31 +23,20 @@ public abstract class BaseSubscriber implements Subscriber<String> {
 
     protected void putInMap(String key) {
         if(key==null) return;
-        AtomicInteger atomicInteger = map.get(key);
-        if(atomicInteger==null){
-            atomicInteger = new AtomicInteger(0);
-            AtomicInteger previous = map.putIfAbsent(key, atomicInteger);
-            atomicInteger = previous==null? atomicInteger : previous;
-        }
-        atomicInteger.incrementAndGet();
+        map.computeIfAbsent(key, key1 -> new Integer(0));
+        map.computeIfPresent(key, (k,v)-> { v++; return v; } );
+
     }
 
-    protected PandaEvent convertStr(String str){
-        try {
-            return objectMapper.readValue(str, PandaEvent.class);
-        } catch (IOException e) {
-            //ignore - no error specific handling
-            return null;
-        }
-    }
 
     @Override
     public void onError(Throwable t) {
-
+        System.out.println(t);
     }
 
     @Override
     public void onComplete() {
+        System.out.println("onComplete");
 
     }
 }
